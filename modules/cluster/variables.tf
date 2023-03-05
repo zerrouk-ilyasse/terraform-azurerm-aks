@@ -8,6 +8,12 @@ variable "resource_group_name" {
   type        = string
 }
 
+variable "workload_identity" {
+  description = "If the cluster has workload identity enabled."
+  type        = bool
+  default = false
+}
+
 variable "cluster_name" {
   description = "Name of the Azure Kubernetes managed cluster to create, also used as a prefix in names of related resources."
   type        = string

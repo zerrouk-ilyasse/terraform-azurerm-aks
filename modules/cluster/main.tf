@@ -34,6 +34,9 @@ resource "azurerm_kubernetes_cluster" "default" {
   kubernetes_version        = var.cluster_version_full
   automatic_channel_upgrade = "node-image"
   sku_tier                  = var.sku_tier_paid ? "Paid" : "Free"
+  
+  oidc_issuer_enabled       = true
+  workload_identity_enabled = var.workload_identity
 
   resource_group_name = var.resource_group_name
   location            = var.location

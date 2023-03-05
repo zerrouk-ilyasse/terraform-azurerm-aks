@@ -9,18 +9,18 @@ resource "kubectl_manifest" "crds" {
   wait              = true
 }
 
-# resource "kubernetes_secret" "thanos_objstore_config" {
-#   metadata {
-#     name      = local.thanos_objstore_secret_name
-#     namespace = var.namespace
-#   }
+resource "kubernetes_secret" "thanos_objstore_config" {
+  metadata {
+    name      = local.thanos_objstore_secret_name
+    namespace = var.namespace
+  }
 
-#   type = "Opaque"
+  type = "Opaque"
 
-#   data = {
-#     "${local.thanos_objstore_secret_key}" = local.thanos_objstore_config
-#   }
-# }
+  data = {
+    "${local.thanos_objstore_secret_key}" = local.thanos_objstore_config
+  }
+}
 
 resource "kubernetes_secret" "grafana_auth" {
   metadata {
@@ -50,18 +50,18 @@ resource "kubectl_manifest" "resource_files" {
   ]
 }
 
-# resource "kubectl_manifest" "resource_objects" {
-#   for_each = local.resource_objects
+resource "kubectl_manifest" "resource_objects" {
+  for_each = local.resource_objects
 
-#   yaml_body = yamlencode(each.value)
+  yaml_body = yamlencode(each.value)
 
-#   server_side_apply = true
-#   wait              = true
+  server_side_apply = true
+  wait              = true
 
-#   depends_on = [
-#     kubectl_manifest.crds
-#   ]
-# }
+  depends_on = [
+    kubectl_manifest.crds
+  ]
+}
 
 resource "kubectl_manifest" "resource_template_objects" {
   for_each = local.dashboard_templates
@@ -94,34 +94,32 @@ resource "helm_release" "default" {
 
   depends_on = [
     kubectl_manifest.crds,
-    # azurerm_storage_container.thanos,
-    # module.identity_thanos,
-    # kubernetes_secret.thanos_objstore_config,
-    # kubernetes_secret.grafana_auth
+    module.identity_thanos,
+    kubernetes_secret.thanos_objstore_config,
+    kubernetes_secret.grafana_auth
   ]
 }
 
-# resource "helm_release" "thanos" {
-#   name      = "thanos"
-#   namespace = var.namespace
+resource "helm_release" "thanos" {
+  name      = "thanos"
+  namespace = var.namespace
 
-#   repository = "https://stevehipwell.github.io/helm-charts/"
-#   chart      = "thanos"
-#   version    = local.thanos_chart_version
-#   skip_crds  = true
+  repository = "https://stevehipwell.github.io/helm-charts/"
+  chart      = "thanos"
+  version    = local.thanos_chart_version
+  skip_crds  = true
 
-#   max_history = 10
-#   timeout     = 600
+  max_history = 10
+  timeout     = 600
 
-#   values = [
-#     yamlencode(local.thanos_chart_values)
-#   ]
+  values = [
+    yamlencode(local.thanos_chart_values)
+  ]
 
-#   depends_on = [
-#     kubectl_manifest.crds,
-#     helm_release.default,
-#     azurerm_storage_container.thanos,
-#     module.identity_thanos,
-#     kubernetes_secret.thanos_objstore_config
-#   ]
-# }
+  depends_on = [
+    kubectl_manifest.crds,
+    helm_release.default,
+    module.identity_thanos,
+    kubernetes_secret.thanos_objstore_config
+  ]
+}

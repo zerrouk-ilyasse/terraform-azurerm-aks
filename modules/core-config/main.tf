@@ -162,27 +162,28 @@ module "ingress_internal_core" {
 module "kube_prometheus_stack" {
   source = "./modules/kube-prometheus-stack"
 
-  subscription_id                 = var.subscription_id
-  location                        = var.location
-  resource_group_name             = var.resource_group_name
-  cluster_name                    = var.cluster_name
-  namespace                       = kubernetes_namespace.default["monitoring"].metadata[0].name
-  labels                          = var.labels
-  zones                           = local.az_count
-  prometheus_remote_write         = local.prometheus.remote_write
-  alertmanager_smtp_host          = local.alertmanager.smtp_host
-  alertmanager_smtp_from          = local.alertmanager.smtp_from
-  alertmanager_receivers          = local.alertmanager.receivers
-  alertmanager_routes             = local.alertmanager.routes
-  grafana_admin_password          = local.grafana.admin_password
-  grafana_additional_plugins      = local.grafana.additional_plugins
-  grafana_additional_data_sources = local.grafana.additional_data_sources
-  ingress_class_name              = module.ingress_internal_core.ingress_class_name
-  ingress_domain                  = local.ingress_internal_core.domain
-  ingress_subdomain_suffix        = local.ingress_internal_core.subdomain_suffix
-  ingress_annotations             = local.ingress_internal_core.annotations
-  # storage_account_name                                           = local.storage_account_name
-  # storage_account_id                                             = var.storage_account_id
+  subscription_id                                                = var.subscription_id
+  location                                                       = var.location
+  resource_group_name                                            = var.resource_group_name
+  cluster_name                                                   = var.cluster_name
+  workload_identity                                              = var.workload_identity
+  cluster_oidc_issuer_url                                        = var.cluster_oidc_issuer_url
+  namespace                                                      = kubernetes_namespace.default["monitoring"].metadata[0].name
+  labels                                                         = var.labels
+  subnet_id                                                      = var.subnet_id
+  zones                                                          = local.az_count
+  prometheus_remote_write                                        = var.core_services_config.prometheus.remote_write
+  alertmanager_smtp_host                                         = var.core_services_config.alertmanager.smtp_host
+  alertmanager_smtp_from                                         = var.core_services_config.alertmanager.smtp_from
+  alertmanager_receivers                                         = var.core_services_config.alertmanager.receivers
+  alertmanager_routes                                            = var.core_services_config.alertmanager.routes
+  grafana_admin_password                                         = var.core_services_config.grafana.admin_password
+  grafana_additional_plugins                                     = var.core_services_config.grafana.additional_plugins
+  grafana_additional_data_sources                                = var.core_services_config.grafana.additional_data_sources
+  ingress_class_name                                             = module.ingress_internal_core.ingress_class_name
+  ingress_domain                                                 = local.ingress_internal_core.domain
+  ingress_subdomain_suffix                                       = local.ingress_internal_core.subdomain_suffix
+  ingress_annotations                                            = local.ingress_internal_core.annotations
   control_plane_log_analytics_workspace_id                       = var.control_plane_log_analytics_workspace_id
   control_plane_log_analytics_workspace_different_resource_group = var.control_plane_log_analytics_workspace_different_resource_group
   oms_agent                                                      = var.oms_agent
@@ -191,10 +192,11 @@ module "kube_prometheus_stack" {
   skip_crds                                                      = true
   tags                                                           = var.tags
 
-  experimental = var.experimental
+  experimental_prometheus_memory_override = var.experimental.prometheus_memory_override
 
   depends_on = [
     kubectl_manifest.kube_prometheus_stack_crds,
+    module.pre_upgrade,
     module.storage,
     module.aad_pod_identity,
     module.cert_manager,

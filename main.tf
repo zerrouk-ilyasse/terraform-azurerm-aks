@@ -109,6 +109,7 @@ module "core_config" {
   cluster_name    = var.cluster_name
   cluster_version = var.cluster_version
   network_plugin  = var.network_plugin
+  cluster_oidc_issuer_url = module.cluster.oidc_issuer_url
 
   ingress_node_group = local.ingress_node_group
 

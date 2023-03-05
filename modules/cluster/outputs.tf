@@ -62,6 +62,11 @@ output "windows_config" {
   }
 }
 
+output "oidc_issuer_url" {
+  description = "URL for the cluster OpenID Connect identity provider."
+  value       = var.workload_identity ? azurerm_kubernetes_cluster.default.oidc_issuer_url : null
+}
+
 # output "data_storage_account_id" {
 #   value = azurerm_storage_account.data.id
 # }
