@@ -149,12 +149,7 @@ variable "tags" {
 # tflint-ignore: terraform_unused_declarations
 variable "experimental" {
   description = "Provide experimental feature flag configuration."
-  type = object({
-    aad_pod_identity_finalizer_wait = string
-    fluent_bit_use_memory_buffer    = bool
-    fluentd_memory_override         = string
-    prometheus_memory_override      = string
-  })
+  type = any
 }
 
 variable "avoid_statefulset_ha_zones_replicas" {
