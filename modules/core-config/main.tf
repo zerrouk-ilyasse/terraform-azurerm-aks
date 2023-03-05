@@ -39,7 +39,7 @@ module "aad_pod_identity" {
   experimental = var.experimental
 
   depends_on = [
-    kubectl_manifest.kube_prometheus_stack_crds
+    kubectl_manifest.kube_prometheus_stack_crds,module.pre_upgrade
   ]
 }
 
@@ -63,7 +63,7 @@ module "cert_manager" {
 
   depends_on = [
     kubectl_manifest.kube_prometheus_stack_crds,
-    module.aad_pod_identity
+    module.aad_pod_identity,module.pre_upgrade
   ]
 }
 
@@ -75,7 +75,7 @@ module "coredns" {
   forward_zones = local.coredns.forward_zones
 
   depends_on = [
-    kubectl_manifest.kube_prometheus_stack_crds
+    kubectl_manifest.kube_prometheus_stack_crds,module.pre_upgrade
   ]
 }
 
@@ -98,7 +98,7 @@ module "external_dns" {
 
   depends_on = [
     kubectl_manifest.kube_prometheus_stack_crds,
-    module.aad_pod_identity
+    module.aad_pod_identity,module.pre_upgrade
   ]
 }
 
@@ -111,7 +111,7 @@ module "fluent_bit" {
   depends_on = [
     kubectl_manifest.kube_prometheus_stack_crds,
     module.storage,
-    module.fluentd
+    module.fluentd,module.pre_upgrade
   ]
 }
 
@@ -137,7 +137,7 @@ module "fluentd" {
   depends_on = [
     kubectl_manifest.kube_prometheus_stack_crds,
     module.storage,
-    module.aad_pod_identity
+    module.aad_pod_identity,module.pre_upgrade
   ]
 }
 
@@ -155,7 +155,7 @@ module "ingress_internal_core" {
 
   depends_on = [
     kubectl_manifest.kube_prometheus_stack_crds,
-    module.cert_manager
+    module.cert_manager,module.pre_upgrade
   ]
 }
 
@@ -211,7 +211,7 @@ module "local_volume_provisioner" {
   labels    = var.labels
 
   depends_on = [
-    kubectl_manifest.kube_prometheus_stack_crds
+    kubectl_manifest.kube_prometheus_stack_crds,module.pre_upgrade
   ]
 }
 
@@ -223,4 +223,18 @@ module "oms_agent" {
   labels           = var.labels
   core_namespaces  = concat(["kube-system"], local.namespaces)
   create_configmap = var.oms_agent_create_configmap
+}
+
+module "pre_upgrade" {
+  source = "./modules/pre-upgrade"
+
+  subscription_id     = var.subscription_id
+  resource_group_name = var.resource_group_name
+  cluster_name        = var.cluster_name
+
+  depends_on = [
+    kubectl_manifest.kube_prometheus_stack_crds,
+    module.storage,
+    kubernetes_namespace.default
+  ]
 }
