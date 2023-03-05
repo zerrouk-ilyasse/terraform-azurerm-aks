@@ -43,6 +43,7 @@ variable "cluster_version" {
 variable "workload_identity" {
   description = "If the cluster has workload identity enabled."
   type        = bool
+  default = false
 }
 
 variable "cluster_oidc_issuer_url" {
