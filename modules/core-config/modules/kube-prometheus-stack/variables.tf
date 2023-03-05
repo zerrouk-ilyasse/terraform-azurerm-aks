@@ -89,7 +89,7 @@ variable "alertmanager_receivers" {
     wechat_configs    = any
     telegram_configs  = any
   }))
-  nullable = false
+  
   default  = []
 }
 
@@ -106,7 +106,7 @@ variable "alertmanager_routes" {
     mute_time_intervals = any
     # active_time_intervals = optional(list(string), [])
   }))
-  nullable = false
+  
   default  = []
 }
 
