@@ -1,3 +1,4 @@
+/*
 resource "random_string" "storage_account_suffix" {
   length  = 8
   special = false
@@ -26,3 +27,4 @@ resource "azurerm_storage_account" "data" {
     bypass                     = ["AzureServices"]
   }
 }
+*/

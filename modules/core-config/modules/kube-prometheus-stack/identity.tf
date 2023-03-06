@@ -32,6 +32,7 @@ module "identity_grafana" {
   tags = var.tags
 }
 
+/*
 module "identity_thanos" {
   source = "../../../identity"
 
@@ -42,14 +43,14 @@ module "identity_thanos" {
   #oidc_issuer_url   = var.cluster_oidc_issuer_url
 
   name = "${var.cluster_name}-thanos"
-/*
+
   subjects = [
     "system:serviceaccount:${var.namespace}:${local.prometheus_service_account_name}",
     "system:serviceaccount:${var.namespace}:${local.thanos_compact_service_account_name}",
     "system:serviceaccount:${var.namespace}:${local.thanos_rule_service_account_name}",
     "system:serviceaccount:${var.namespace}:${local.thanos_store_gateway_service_account_name}"
   ]
-*/
+
   namespace = var.namespace
   labels    = var.labels
 
@@ -60,3 +61,4 @@ module "identity_thanos" {
 
   tags = var.tags
 }
+*/
