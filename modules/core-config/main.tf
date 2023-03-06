@@ -192,8 +192,6 @@ module "kube_prometheus_stack" {
   skip_crds                                                      = true
   tags                                                           = var.tags
 
-  experimental_prometheus_memory_override = var.experimental.prometheus_memory_override
-
   depends_on = [
     kubectl_manifest.kube_prometheus_stack_crds,
     module.pre_upgrade,
