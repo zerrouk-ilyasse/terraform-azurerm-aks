@@ -200,5 +200,5 @@ variable "tags" {
 variable "experimental_prometheus_memory_override" {
   description = "Provide experimental feature flag configuration."
   type        = string
-  
+  default     =""
 }
