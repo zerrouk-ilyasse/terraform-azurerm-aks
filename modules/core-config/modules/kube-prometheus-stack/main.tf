@@ -8,7 +8,7 @@ resource "kubectl_manifest" "crds" {
   server_side_apply = true
   wait              = true
 }
-
+/*
 resource "kubernetes_secret" "thanos_objstore_config" {
   metadata {
     name      = local.thanos_objstore_secret_name
@@ -21,7 +21,7 @@ resource "kubernetes_secret" "thanos_objstore_config" {
     "${local.thanos_objstore_secret_key}" = local.thanos_objstore_config
   }
 }
-
+*/
 resource "kubernetes_secret" "grafana_auth" {
   metadata {
     name      = "grafana-auth"
@@ -49,7 +49,7 @@ resource "kubectl_manifest" "resource_files" {
     kubectl_manifest.crds
   ]
 }
-
+/*
 resource "kubectl_manifest" "resource_objects" {
   for_each = local.resource_objects
 
@@ -62,7 +62,7 @@ resource "kubectl_manifest" "resource_objects" {
     kubectl_manifest.crds
   ]
 }
-
+*/
 resource "kubectl_manifest" "resource_template_objects" {
   for_each = local.dashboard_templates
 
