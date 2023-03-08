@@ -1,10 +1,10 @@
 locals {
   chart_version = "45.1.1"
 
-  thanos_chart_version = "1.10.1"
+  #thanos_chart_version = "1.10.1"
 
   # Thanos image version should match version in Thanos chart
-  thanos_image_version = "0.30.1"
+  #thanos_image_version = "0.30.1"
 
   use_aad_workload_identity = false
 
@@ -131,10 +131,10 @@ locals {
 
         podMetadata = {
           labels = merge(var.labels, var.workload_identity && local.use_aad_workload_identity ? {} : {
-            aadpodidbinding = module.identity_thanos.name
+           # aadpodidbinding = module.identity_thanos.name
           })
           annotations = {
-            "checksum/thanos-objstore-config" = local.thanos_objstore_secret_checksum
+            #"checksum/thanos-objstore-config" = local.thanos_objstore_secret_checksum
           }
         }
 
@@ -196,7 +196,7 @@ locals {
           }
         }
 
-        thanos = {
+        /*thanos = {
           image = "quay.io/thanos/thanos:v${local.thanos_image_version}"
 
           resources = {
@@ -215,7 +215,7 @@ locals {
             name = local.thanos_objstore_secret_name
             key  = local.thanos_objstore_secret_key
           }
-        }
+        }*/
       }
 
       serviceAccount = {
@@ -230,7 +230,7 @@ locals {
           "azure.workload.identity/client-id" = module.identity_thanos.id
         } : {}
       }
-
+/*
       thanosService = {
         enabled = true
       }
@@ -244,7 +244,7 @@ locals {
         minAvailable   = ""
         maxUnavailable = 1
       }
-
+*/
       ingress = {
         enabled          = true
         annotations      = var.ingress_annotations
@@ -627,6 +627,7 @@ locals {
     }
   }
 
+/*
   thanos_chart_values = {
     serviceMonitor = {
       enabled = true
@@ -1090,7 +1091,7 @@ locals {
       }
     }
   }
-
+*/
   thanos_ruler = {
     apiVersion = "monitoring.coreos.com/v1"
     kind       = "ThanosRuler"
@@ -1287,7 +1288,7 @@ locals {
   resource_group_id                                                = "/subscriptions/${var.subscription_id}/resourceGroups/${var.resource_group_name}"
   control_plane_log_analytics_workspace_external_resource_group_id = var.control_plane_log_analytics_workspace_different_resource_group ? regex("([[:ascii:]]*)(/providers/)", var.control_plane_log_analytics_workspace_id)[0] : ""
   oms_agent_log_analytics_workspace_resource_group_id              = var.oms_agent && var.oms_agent_log_analytics_workspace_id != null ? regex("([[:ascii:]]*)(/providers/)", var.oms_agent_log_analytics_workspace_id)[0] : ""
-
+/*
   thanos_objstore_secret_name     = "thanos-object-storage"
   thanos_objstore_secret_key      = "config"
   thanos_objstore_secret_checksum = sha256(local.thanos_objstore_config)
@@ -1302,7 +1303,7 @@ locals {
       endpoint: ${local.thanos_objstore_end_point}
       user_assigned_id: ${module.identity_thanos.client_id}
   EOT
-
+*/
   thanos_query_frontend_downstream_tripper_config = <<-EOT
     max_idle_conns_per_host: 100
   EOT
@@ -1315,6 +1316,6 @@ locals {
 
   crd_files           = { for x in fileset(path.module, "crds/*.yaml") : basename(x) => "${path.module}/${x}" }
   resource_files      = { for x in fileset(path.module, "resources/*.yaml") : basename(x) => "${path.module}/${x}" }
-  resource_objects    = { thanos_ruler = local.thanos_ruler }
+  #resource_objects    = { thanos_ruler = local.thanos_ruler }
   dashboard_templates = { for x in fileset(path.module, "resources/configmap-dashboard-*.yaml.tpl") : basename(x) => { path = "${path.module}/${x}", vars = { resource_id = var.control_plane_log_analytics_workspace_id, subscription_id = var.subscription_id } } }
 }
