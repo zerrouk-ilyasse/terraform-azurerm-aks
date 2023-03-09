@@ -225,10 +225,11 @@ locals {
         labels = var.workload_identity && local.use_aad_workload_identity ? {
           "azure.workload.identity/use" = "true"
         } : {}
-
+/*
         annotations = var.workload_identity && local.use_aad_workload_identity ? {
           "azure.workload.identity/client-id" = module.identity_thanos.id
         } : {}
+*/
       }
 /*
       thanosService = {
@@ -1091,7 +1092,7 @@ locals {
       }
     }
   }
-*/
+
   thanos_ruler = {
     apiVersion = "monitoring.coreos.com/v1"
     kind       = "ThanosRuler"
@@ -1171,7 +1172,7 @@ locals {
       }
     }
   }
-
+*/
   alertmanager_base_receivers = [{
     name              = "null"
     email_configs     = []
@@ -1244,7 +1245,7 @@ locals {
       secureJsonData = null
       version        = null
       editable       = false
-    },
+    },/*
     {
       name            = "Prometheus"
       type            = "prometheus"
@@ -1264,7 +1265,7 @@ locals {
       secureJsonData = null
       version        = null
       editable       = false
-    },
+    },*/
     {
       name            = "Azure Monitor"
       type            = "grafana-azure-monitor-datasource"
