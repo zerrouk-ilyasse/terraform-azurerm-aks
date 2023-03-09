@@ -94,12 +94,13 @@ resource "helm_release" "default" {
 
   depends_on = [
     kubectl_manifest.crds,
-    module.identity_thanos,
-    kubernetes_secret.thanos_objstore_config,
-    kubernetes_secret.grafana_auth
+    #module.identity_thanos,
+    #kubernetes_secret.thanos_objstore_config,
+    #kubernetes_secret.grafana_auth
   ]
 }
 
+/*
 resource "helm_release" "thanos" {
   name      = "thanos"
   namespace = var.namespace
@@ -122,4 +123,4 @@ resource "helm_release" "thanos" {
     module.identity_thanos,
     kubernetes_secret.thanos_objstore_config
   ]
-}
+}*/
