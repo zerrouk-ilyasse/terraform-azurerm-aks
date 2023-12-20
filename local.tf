@@ -18,8 +18,12 @@ locals {
   cluster_full_versions = merge({
     "1.23" = "1.23.12"
     "1.24" = "1.24.9"
-    }, local.experimental_v1_25 ? {
-    "1.25" = "1.25.5"
+    "1.25" = "1.25.6"
+    "1.26" = "1.26.10"
+    "1.27" = "1.27.7"
+    "1.28" = "1.28.3"
+    }, local.experimental_v1_28 ? {
+    "1.28" = "1.28.3"
   } : {})
 
   availability_zones = [1, 2, 3]
@@ -119,6 +123,6 @@ locals {
   experimental_oms_agent_log_analytics_workspace_id                       = lookup(var.experimental, "oms_log_analytics_workspace_id", null)
   experimental_oms_agent_create_configmap                                 = lookup(var.experimental, "oms_agent_create_configmap", true)
   experimental_windows_support                                            = lookup(var.experimental, "windows_support", false)
-  experimental_v1_25                                                      = lookup(var.experimental, "v1_25", false)
+  experimental_v1_28                                                      = lookup(var.experimental, "v1_25", false)
   experimental_node_group_os_config                                       = lookup(var.experimental, "node_group_os_config", false)
 }
